@@ -1,13 +1,13 @@
-package cl.duoc.innovatech.innovatech_microservicios_base;
+package cl.duoc.innovatech.serviciorecurso;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class InnovatechMicroserviciosBaseApplication {
+public class ServicioRecursoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(InnovatechMicroserviciosBaseApplication.class, args);
+		SpringApplication.run(ServicioRecursoApplication.class, args);
 	}
 
 }
