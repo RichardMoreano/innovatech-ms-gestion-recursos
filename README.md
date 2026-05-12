@@ -1,4 +1,4 @@
-# Innovatech Resource Service
+# Innovatech Servicio Recurso
 
 Microservicio de Gestión de Recursos y Colaboración - Innovatech Solutions
 
