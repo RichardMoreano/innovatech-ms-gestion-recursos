@@ -53,18 +53,19 @@ class RecursoControllerTest {
             @Override
             public RecursoResponse obtenerPorId(Long id) {
                 if (id == 1L) return crear(new RecursoRequest("Ana","Perez","a@a.cl","DEV",40));
-                return null;
+                throw new cl.duoc.innovatech.serviciorecurso.aplication.exception.RecursoNotFoundException(id);
             }
 
             @Override
             public RecursoResponse actualizar(Long id, RecursoRequest request) {
                 if (id == 1L) return crear(request);
-                return null;
+                throw new cl.duoc.innovatech.serviciorecurso.aplication.exception.RecursoNotFoundException(id);
             }
 
             @Override
             public boolean eliminar(Long id) {
-                return id == 1L;
+                if (id == 1L) return true;
+                throw new cl.duoc.innovatech.serviciorecurso.aplication.exception.RecursoNotFoundException(id);
             }
         };
 
@@ -96,6 +97,17 @@ class RecursoControllerTest {
     @Test
     void testObtenerPorIdNoExisteDevuelve404() throws Exception {
         mockMvc.perform(get("/api/recursos/999"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testActualizarRecursoNoEncontradoRetornaCuatroCientosCuatro() throws Exception {
+        String body = "{\"nombre\":\"Pedro\",\"apellido\":\"Gomez\",\"email\":\"p@p.cl\",\"rol\":\"DEV\",\"horasSemana\":35}";
+
+        mockMvc.perform(put("/api/recursos/999")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-User-Id", "1")
+                        .content(body))
                 .andExpect(status().isNotFound());
     }
 
