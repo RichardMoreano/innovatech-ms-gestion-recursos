@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import cl.duoc.innovatech.serviciorecurso.aplication.exception.RecursoNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +46,7 @@ public class RecursoService {
     public RecursoResponse obtenerPorId(Long id) {
         return repository.findById(id)
                 .map(this::mapToResponse)
-                .orElse(null);
+                .orElseThrow(() -> new RecursoNotFoundException(id));
     }
 
     public RecursoResponse actualizar(Long id, RecursoRequest request) {
@@ -57,14 +58,14 @@ public class RecursoService {
             existing.setHorasSemana(request.getHorasSemana());
             Recurso saved = repository.save(existing);
             return mapToResponse(saved);
-        }).orElse(null);
+        }).orElseThrow(() -> new RecursoNotFoundException(id));
     }
 
     public boolean eliminar(Long id) {
         return repository.findById(id).map(existing -> {
             repository.delete(existing);
             return true;
-        }).orElse(false);
+        }).orElseThrow(() -> new RecursoNotFoundException(id));
     }
 
     private RecursoResponse mapToResponse(Recurso recurso) {
