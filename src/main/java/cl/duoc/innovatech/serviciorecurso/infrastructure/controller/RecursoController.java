@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import cl.duoc.innovatech.serviciorecurso.aplication.exception.RecursoNotFoundException;
 
 @RestController
 @RequestMapping("/api/recursos")
@@ -40,7 +41,6 @@ public class RecursoController {
     public ResponseEntity<RecursoResponse> obtenerPorId(@PathVariable Long id,
                                                        @RequestHeader(value = "X-User-Id", required = false) String userId) {
         RecursoResponse r = recursoService.obtenerPorId(id);
-        if (r == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.ok(r);
     }
 
@@ -49,15 +49,18 @@ public class RecursoController {
                                                       @RequestBody RecursoRequest request,
                                                       @RequestHeader(value = "X-User-Id", required = false) String userId) {
         RecursoResponse r = recursoService.actualizar(id, request);
-        if (r == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.ok(r);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id,
                                       @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        boolean ok = recursoService.eliminar(id);
-        if (!ok) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        recursoService.eliminar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(RecursoNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(RecursoNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }
