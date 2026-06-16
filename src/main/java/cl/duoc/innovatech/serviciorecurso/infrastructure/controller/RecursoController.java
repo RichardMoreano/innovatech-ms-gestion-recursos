@@ -18,7 +18,10 @@ public class RecursoController {
     private final RecursoService recursoService;
 
     @PostMapping
-    public ResponseEntity<RecursoResponse> crear(@RequestBody RecursoRequest request) {
+    public ResponseEntity<RecursoResponse> crear(@RequestHeader(value = "X-User-Id", required = false) String userId,
+                                                 @RequestHeader(value = "X-User-Roles", required = false) String roles,
+                                                 @RequestBody RecursoRequest request) {
+        // Comentario estilo estudiante: acá recibo los headers que inyecta la gateway
         RecursoResponse response = recursoService.crear(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -31,5 +34,30 @@ public class RecursoController {
     @GetMapping("/disponibilidad/{estado}")
     public ResponseEntity<List<RecursoResponse>> listarPorDisponibilidad(@PathVariable String estado) {
         return ResponseEntity.ok(recursoService.listarPorDisponibilidad(estado));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RecursoResponse> obtenerPorId(@PathVariable Long id,
+                                                       @RequestHeader(value = "X-User-Id", required = false) String userId) {
+        RecursoResponse r = recursoService.obtenerPorId(id);
+        if (r == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.ok(r);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RecursoResponse> actualizar(@PathVariable Long id,
+                                                      @RequestBody RecursoRequest request,
+                                                      @RequestHeader(value = "X-User-Id", required = false) String userId) {
+        RecursoResponse r = recursoService.actualizar(id, request);
+        if (r == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.ok(r);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id,
+                                      @RequestHeader(value = "X-User-Id", required = false) String userId) {
+        boolean ok = recursoService.eliminar(id);
+        if (!ok) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.noContent().build();
     }
 }

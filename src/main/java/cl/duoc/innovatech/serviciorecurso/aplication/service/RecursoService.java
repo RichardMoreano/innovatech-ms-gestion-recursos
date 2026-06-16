@@ -42,6 +42,31 @@ public class RecursoService {
                 .collect(Collectors.toList());
     }
 
+    public RecursoResponse obtenerPorId(Long id) {
+        return repository.findById(id)
+                .map(this::mapToResponse)
+                .orElse(null);
+    }
+
+    public RecursoResponse actualizar(Long id, RecursoRequest request) {
+        return repository.findById(id).map(existing -> {
+            existing.setNombre(request.getNombre());
+            existing.setApellido(request.getApellido());
+            existing.setEmail(request.getEmail());
+            existing.setRol(request.getRol());
+            existing.setHorasSemana(request.getHorasSemana());
+            Recurso saved = repository.save(existing);
+            return mapToResponse(saved);
+        }).orElse(null);
+    }
+
+    public boolean eliminar(Long id) {
+        return repository.findById(id).map(existing -> {
+            repository.delete(existing);
+            return true;
+        }).orElse(false);
+    }
+
     private RecursoResponse mapToResponse(Recurso recurso) {
         return RecursoResponse.builder()
                 .id(recurso.getId())
