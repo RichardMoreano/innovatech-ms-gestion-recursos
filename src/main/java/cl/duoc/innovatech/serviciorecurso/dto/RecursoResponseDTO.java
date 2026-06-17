@@ -1,15 +1,10 @@
-package cl.duoc.innovatech.serviciorecurso.aplication.dto;
+package cl.duoc.innovatech.serviciorecurso.dto;
 
-import lombok.*;
-
+import lombok.Data;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class RecursoResponse {
+@Data
+public class RecursoResponseDTO {
     private Long id;
     private String nombre;
     private String apellido;
