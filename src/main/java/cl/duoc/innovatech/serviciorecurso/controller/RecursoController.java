@@ -49,4 +49,12 @@ public class RecursoController {
         recursoService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/disponibilidad")
+    public ResponseEntity<Void> actualizarDisponibilidad(
+            @PathVariable Long id, 
+            @RequestParam String disponibilidad) {
+        recursoService.actualizarDisponibilidad(id, disponibilidad);
+        return ResponseEntity.ok().build();
+    }
 }
