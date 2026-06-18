@@ -24,6 +24,6 @@ RUN chown spring:spring app.jar
 USER spring
 
 # Puerto del servicio de gestión de recursos
-EXPOSE 8082
+EXPOSE 8086
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
