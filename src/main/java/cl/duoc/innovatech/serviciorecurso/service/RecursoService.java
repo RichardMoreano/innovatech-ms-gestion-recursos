@@ -11,4 +11,5 @@ public interface RecursoService {
     RecursoResponseDTO obtenerPorId(Long id);
     RecursoResponseDTO actualizar(Long id, RecursoRequestDTO request);
     void eliminar(Long id);
+    void actualizarDisponibilidad(Long id, String disponibilidad);
 }
