@@ -5,6 +5,7 @@ import cl.duoc.innovatech.serviciorecurso.dto.RecursoResponseDTO;
 import cl.duoc.innovatech.serviciorecurso.model.Recurso;
 import cl.duoc.innovatech.serviciorecurso.repository.RecursoRepository;
 import cl.duoc.innovatech.serviciorecurso.service.RecursoService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -71,6 +72,15 @@ public class RecursoServiceImpl implements RecursoService {
             throw new RuntimeException("Recurso no encontrado con ID: " + id);
         }
         recursoRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void actualizarDisponibilidad(Long id, String disponibilidad) {
+        Recurso recurso = recursoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Recurso no encontrado con ID: " + id));
+        recurso.setDisponibilidad(disponibilidad);
+        recursoRepository.save(recurso);
     }
 
     private RecursoResponseDTO mapToDTO(Recurso recurso) {

@@ -26,7 +26,10 @@ public class Recurso {
     private String email;
 
     private String rol;           // DESARROLLADOR, QA, DEVOPS, PM
-    private String disponibilidad; // DISPONIBLE, OCUPADO, VACACIONES
+    
+    @Column(nullable = false, length = 30)
+    private String disponibilidad; // CORREGIDO: Cambiado de Boolean a String (DISPONIBLE, OCUPADO, VACACIONES)
+    
     private LocalDateTime fechaContratacion;
     private Integer horasSemana;
 }
